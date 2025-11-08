@@ -1,0 +1,133 @@
+import Foundation
+import MediaPlayer
+
+class MediaRemoteController: ObservableObject {
+    static let shared = MediaRemoteController()
+
+    private var commandCenter: MPRemoteCommandCenter
+    private var nowPlayingInfo = [String: Any]()
+
+    private init() {
+        commandCenter = MPRemoteCommandCenter.shared()
+        setupRemoteCommands()
+    }
+
+    private func setupRemoteCommands() {
+        // Play command
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { [weak self] event in
+            self?.handlePlay()
+            return .success
+        }
+
+        // Pause command
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget { [weak self] event in
+            self?.handlePause()
+            return .success
+        }
+
+        // Toggle play/pause
+        commandCenter.togglePlayPauseCommand.isEnabled = true
+        commandCenter.togglePlayPauseCommand.addTarget { [weak self] event in
+            self?.handleTogglePlayPause()
+            return .success
+        }
+
+        // Next track
+        commandCenter.nextTrackCommand.isEnabled = true
+        commandCenter.nextTrackCommand.addTarget { [weak self] event in
+            self?.handleNext()
+            return .success
+        }
+
+        // Previous track
+        commandCenter.previousTrackCommand.isEnabled = true
+        commandCenter.previousTrackCommand.addTarget { [weak self] event in
+            self?.handlePrevious()
+            return .success
+        }
+    }
+
+    func updateNowPlayingInfo(title: String, artist: String, album: String, duration: TimeInterval, currentTime: TimeInterval, artwork: MPMediaItemArtwork? = nil) {
+        nowPlayingInfo[MPMediaItemPropertyTitle] = title
+        nowPlayingInfo[MPMediaItemPropertyArtist] = artist
+        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = album
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
+
+        if let artwork = artwork {
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+        }
+
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
+
+    func updatePlaybackState(isPlaying: Bool) {
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? 1.0 : 0.0
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+    }
+
+    func clearNowPlayingInfo() {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        nowPlayingInfo.removeAll()
+    }
+
+    // Public methods to trigger playback commands
+    func play() {
+        handlePlay()
+    }
+
+    func pause() {
+        handlePause()
+    }
+
+    func togglePlayPause() {
+        handleTogglePlayPause()
+    }
+
+    func nextTrack() {
+        handleNext()
+    }
+
+    func previousTrack() {
+        handlePrevious()
+    }
+
+    // These handlers would need to communicate with Plex
+    // For now, they're placeholders that you can implement
+    private func handlePlay() {
+        print("MediaRemote: Play command received")
+        NotificationCenter.default.post(name: .mediaRemotePlay, object: nil)
+    }
+
+    private func handlePause() {
+        print("MediaRemote: Pause command received")
+        NotificationCenter.default.post(name: .mediaRemotePause, object: nil)
+    }
+
+    private func handleTogglePlayPause() {
+        print("MediaRemote: Toggle play/pause command received")
+        NotificationCenter.default.post(name: .mediaRemoteTogglePlayPause, object: nil)
+    }
+
+    private func handleNext() {
+        print("MediaRemote: Next track command received")
+        NotificationCenter.default.post(name: .mediaRemoteNext, object: nil)
+    }
+
+    private func handlePrevious() {
+        print("MediaRemote: Previous track command received")
+        NotificationCenter.default.post(name: .mediaRemotePrevious, object: nil)
+    }
+}
+
+// Notification names for media remote commands
+extension Notification.Name {
+    static let mediaRemotePlay = Notification.Name("mediaRemotePlay")
+    static let mediaRemotePause = Notification.Name("mediaRemotePause")
+    static let mediaRemoteTogglePlayPause = Notification.Name("mediaRemoteTogglePlayPause")
+    static let mediaRemoteNext = Notification.Name("mediaRemoteNext")
+    static let mediaRemotePrevious = Notification.Name("mediaRemotePrevious")
+}

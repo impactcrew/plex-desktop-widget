@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Plex Now Playing</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="widget" class="widget">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <span>Connecting to Plex...</span>
+    </div>
+    <div id="nowPlaying" class="now-playing" style="display: none;">
+      <div class="album-art">
+        <img id="albumArt" src="" alt="Album Art">
+      </div>
+      <div class="track-info">
+        <div id="trackTitle" class="track-title"></div>
+        <div id="artistName" class="artist-name">Artist Name</div>
+        <div id="albumName" class="album-name">Album Name</div>
+        <div class="track-progress">
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+          </div>
+          <div id="timeDisplay" class="time-display">0:00 / 0:00</div>
+        </div>
+        <div class="controls">
+          <button id="prevBtn" class="control-btn" title="Previous">⏮</button>
+          <button id="playPauseBtn" class="control-btn" title="Play/Pause">⏸</button>
+          <button id="nextBtn" class="control-btn" title="Next">⏭</button>
+        </div>
+      </div>
+    </div>
+    <div id="notPlaying" class="not-playing" style="display: none;">
+      <div class="idle-message">No music playing</div>
+    </div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+node_modules/
+dist/
+.DS_Store
+config.json
+*.log
+
+# Xcode
+PlexWidget/build/
+PlexWidget/PlexWidget.xcodeproj/xcuserdata/
+PlexWidget/PlexWidget.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Temporary HTML mockups (for design iteration)
+*-mockups.html
+mockups.html
+icon-*.html

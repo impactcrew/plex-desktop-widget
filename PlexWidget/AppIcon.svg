@@ -1,0 +1,106 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with macOS-style gradient -->
+  <defs>
+    <!-- Main gradient background -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B2FBF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8B3FDF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5A00D;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Overlay gradient for depth -->
+    <radialGradient id="overlayGradient" cx="50%" cy="40%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.1" />
+    </radialGradient>
+
+    <!-- Play button gradient -->
+    <linearGradient id="playGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F5F7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E8E8EA;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Waveform gradient -->
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FDB913;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#F5F5F7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FDB913;stop-opacity:0.9" />
+    </linearGradient>
+
+    <!-- Inner shadow -->
+    <filter id="innerShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Outer glow -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Base rounded square (macOS style) -->
+  <rect width="1024" height="1024" rx="226" fill="url(#bgGradient)"/>
+
+  <!-- Overlay for depth -->
+  <rect width="1024" height="1024" rx="226" fill="url(#overlayGradient)"/>
+
+  <!-- Subtle inner border -->
+  <rect x="12" y="12" width="1000" height="1000" rx="214" fill="none" stroke="url(#playGradient)" stroke-width="2" opacity="0.3"/>
+
+  <!-- Audio waveform bars (background) -->
+  <g opacity="0.4" transform="translate(512, 512)">
+    <!-- Left side bars -->
+    <rect x="-380" y="-40" width="24" height="80" rx="12" fill="url(#waveGradient)"/>
+    <rect x="-340" y="-70" width="24" height="140" rx="12" fill="url(#waveGradient)"/>
+    <rect x="-300" y="-50" width="24" height="100" rx="12" fill="url(#waveGradient)"/>
+    <rect x="-260" y="-90" width="24" height="180" rx="12" fill="url(#waveGradient)"/>
+    <rect x="-220" y="-60" width="24" height="120" rx="12" fill="url(#waveGradient)"/>
+
+    <!-- Right side bars -->
+    <rect x="356" y="-40" width="24" height="80" rx="12" fill="url(#waveGradient)"/>
+    <rect x="316" y="-70" width="24" height="140" rx="12" fill="url(#waveGradient)"/>
+    <rect x="276" y="-50" width="24" height="100" rx="12" fill="url(#waveGradient)"/>
+    <rect x="236" y="-90" width="24" height="180" rx="12" fill="url(#waveGradient)"/>
+    <rect x="196" y="-60" width="24" height="120" rx="12" fill="url(#waveGradient)"/>
+  </g>
+
+  <!-- Central play button circle (outer ring) -->
+  <circle cx="512" cy="512" r="200" fill="url(#playGradient)" opacity="0.2" filter="url(#glow)"/>
+
+  <!-- Central play button circle (main) -->
+  <circle cx="512" cy="512" r="160" fill="url(#playGradient)" filter="url(#innerShadow)"/>
+
+  <!-- Play triangle -->
+  <path d="M 460 400 L 460 624 L 640 512 Z" fill="#6B2FBF" opacity="0.95"/>
+
+  <!-- Highlight on play button -->
+  <circle cx="512" cy="430" r="80" fill="white" opacity="0.15"/>
+
+  <!-- Foreground waveform bars (more prominent) -->
+  <g transform="translate(512, 512)">
+    <!-- Left side -->
+    <rect x="-160" y="-30" width="20" height="60" rx="10" fill="#FDB913" opacity="0.8"/>
+    <rect x="-130" y="-55" width="20" height="110" rx="10" fill="#FDB913" opacity="0.9"/>
+    <rect x="-100" y="-45" width="20" height="90" rx="10" fill="#F5F5F7" opacity="0.95"/>
+
+    <!-- Right side -->
+    <rect x="140" y="-30" width="20" height="60" rx="10" fill="#FDB913" opacity="0.8"/>
+    <rect x="110" y="-55" width="20" height="110" rx="10" fill="#FDB913" opacity="0.9"/>
+    <rect x="80" y="-45" width="20" height="90" rx="10" fill="#F5F5F7" opacity="0.95"/>
+  </g>
+
+  <!-- Subtle outer glow -->
+  <rect width="1024" height="1024" rx="226" fill="none" stroke="url(#waveGradient)" stroke-width="4" opacity="0.1"/>
+</svg>

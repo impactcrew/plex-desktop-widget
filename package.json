@@ -1,0 +1,20 @@
+{
+  "name": "plex-desktop-widget",
+  "version": "1.0.0",
+  "description": "Desktop widget to display currently playing Plex media",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "keywords": ["plex", "desktop", "widget", "now-playing"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^28.0.0",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0"
+  }
+}
