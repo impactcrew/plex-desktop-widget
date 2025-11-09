@@ -1,8 +1,8 @@
-node_modules/
-dist/
+# macOS
 .DS_Store
-config.json
-*.log
+
+# Node.js (if used for tooling)
+node_modules/
 
 # Xcode
 PlexWidget/build/
@@ -21,7 +21,11 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 
+# Temporary files
+*.log
+
 # Temporary HTML mockups (for design iteration)
-*-mockups.html
-mockups.html
-icon-*.html
+*-mockup.html
+layout-mockup.html
+control-center-mockup.html
+music-widget-mockup.html

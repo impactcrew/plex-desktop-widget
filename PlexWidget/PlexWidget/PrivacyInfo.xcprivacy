@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Privacy Manifest for Plex Desktop Widget -->
+    <!-- Required by Apple for App Store submission -->
+
+    <!-- NSPrivacyTracking: Does the app use data for tracking? -->
+    <key>NSPrivacyTracking</key>
+    <false/>
+
+    <!-- NSPrivacyTrackingDomains: Domains used for tracking -->
+    <key>NSPrivacyTrackingDomains</key>
+    <array/>
+
+    <!-- NSPrivacyCollectedDataTypes: Types of data collected by the app -->
+    <key>NSPrivacyCollectedDataTypes</key>
+    <array>
+        <!-- No data is collected or transmitted to third parties -->
+        <!-- All data stays local or communicates only with user's Plex server -->
+    </array>
+
+    <!-- NSPrivacyAccessedAPITypes: Required Reason APIs accessed by the app -->
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+        <!-- UserDefaults API -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <!-- CA92.1: Access user defaults to read/write app settings and preferences -->
+                <string>CA92.1</string>
+            </array>
+        </dict>
+
+        <!-- System Boot Time API (if used indirectly through timers/date operations) -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategorySystemBootTime</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <!-- 35F9.1: Access system boot time for measuring time intervals -->
+                <string>35F9.1</string>
+            </array>
+        </dict>
+
+        <!-- File Timestamp API -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <!-- C617.1: Access file timestamps for caching and data management -->
+                <string>C617.1</string>
+            </array>
+        </dict>
+    </array>
+
+    <!-- Network Usage Information -->
+    <!-- This app makes network requests to: -->
+    <!-- 1. User's self-hosted Plex Media Server (configurable by user) -->
+    <!-- 2. No third-party analytics or tracking services -->
+    <!-- 3. No data collection or transmission to developers -->
+
+    <!-- Keychain Usage Information -->
+    <!-- This app uses Keychain to securely store: -->
+    <!-- 1. Plex authentication token (kSecAttrAccessibleWhenUnlockedThisDeviceOnly) -->
+    <!-- 2. Token is device-specific and not synced via iCloud Keychain -->
+    <!-- 3. Token is only accessible when device is unlocked -->
+
+    <!-- UserDefaults Usage Information -->
+    <!-- This app uses UserDefaults to store: -->
+    <!-- 1. Plex server URL (non-sensitive configuration) -->
+    <!-- 2. Widget display preferences (layout, theme, colors) -->
+    <!-- 3. Application settings (launch at login, update intervals) -->
+</dict>
+</plist>

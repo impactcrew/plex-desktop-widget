@@ -4,8 +4,11 @@ import MediaPlayer
 struct ContentView: View {
     @StateObject private var plexAPI: PlexAPI
     @State private var mediaController = MediaRemoteController.shared
+    @ObservedObject var settings: WidgetSettings
+    @AppStorage("hasPlayedBefore") private var wasPlaying = false
 
-    init() {
+    init(settings: WidgetSettings) {
+        self.settings = settings
         // Load configuration
         if let config = ConfigManager.shared.loadConfig() {
             _plexAPI = StateObject(wrappedValue: PlexAPI(
@@ -21,37 +24,46 @@ struct ContentView: View {
         }
     }
 
-    var body: some View {
-        ZStack {
-            // Black transparent background like terminal
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.black.opacity(0.85))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.15), lineWidth: 1)
-                )
-                .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+    var placeholderNowPlaying: NowPlaying {
+        NowPlaying(
+            title: "—",
+            artist: "—",
+            album: "—",
+            albumArtUrl: nil,
+            state: "stopped",
+            duration: 0,
+            viewOffset: 0,
+            sessionKey: nil,
+            playerAddress: nil,
+            machineIdentifier: nil
+        )
+    }
 
-            // Content
-            Group {
-                if plexAPI.isLoading {
-                    LoadingView()
-                } else if let errorMessage = plexAPI.errorMessage {
-                    ErrorView(message: errorMessage)
-                } else if let nowPlaying = plexAPI.nowPlaying {
-                    NowPlayingView(nowPlaying: nowPlaying)
-                        .onAppear {
-                            updateMediaRemote(nowPlaying: nowPlaying)
-                        }
-                        .onChange(of: nowPlaying.id) { _ in
-                            updateMediaRemote(nowPlaying: nowPlaying)
-                        }
-                } else {
-                    NotPlayingView()
-                }
+    var body: some View {
+        Group {
+            if plexAPI.isLoading && !wasPlaying {
+                LoadingView()
+            } else if let errorMessage = plexAPI.errorMessage {
+                ErrorView(message: errorMessage)
+            } else if let nowPlaying = plexAPI.nowPlaying {
+                NowPlayingView(nowPlaying: nowPlaying, plexAPI: plexAPI, settings: settings)
+                    .onAppear {
+                        wasPlaying = true
+                        updateMediaRemote(nowPlaying: nowPlaying)
+                    }
+                    .onChange(of: nowPlaying.id) { _ in
+                        wasPlaying = true
+                        updateMediaRemote(nowPlaying: nowPlaying)
+                    }
+            } else if wasPlaying {
+                // Show blank player with placeholder data
+                NowPlayingView(nowPlaying: placeholderNowPlaying, plexAPI: plexAPI, settings: settings)
+            } else {
+                NotPlayingView()
             }
         }
-        .frame(width: 420, height: 120)
+        .frame(width: 552, height: 192)
+        .padding(20)
         .onAppear {
             plexAPI.startUpdating(interval: 2.0)
         }
@@ -142,6 +154,67 @@ struct NotPlayingView: View {
     }
 }
 
+struct BlankPlayerView: View {
+    @ObservedObject var settings: WidgetSettings
+
+    var isDarkMode: Bool {
+        settings.theme == .dark
+    }
+
+    var backgroundColor: Color {
+        isDarkMode ? Color(red: 13/255, green: 13/255, blue: 13/255).opacity(0.80) : Color.white
+    }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // Default vinyl artwork
+            if settings.layoutStyle == .overlay {
+                // Overlay mode - vinyl on left
+                ZStack(alignment: .leading) {
+                    Image(systemName: "circle.fill")
+                        .resizable()
+                        .frame(width: 140, height: 140)
+                        .foregroundColor(Color.white.opacity(0.1))
+                        .clipShape(settings.albumArtShape == .circular ? AnyShape(Circle()) : AnyShape(RoundedRectangle(cornerRadius: 16)))
+                        .offset(x: -10, y: 0)
+                }
+                .frame(width: 75, height: 140)
+            } else {
+                // Side mode - vinyl on left
+                Image(systemName: "circle.fill")
+                    .resizable()
+                    .frame(width: 140, height: 140)
+                    .foregroundColor(Color.white.opacity(0.1))
+                    .clipShape(settings.albumArtShape == .circular ? AnyShape(Circle()) : AnyShape(RoundedRectangle(cornerRadius: 16)))
+            }
+
+            // Blank content area
+            VStack(alignment: .leading, spacing: 8) {
+                Spacer()
+                Rectangle()
+                    .fill(Color.white.opacity(0.1))
+                    .frame(width: 200, height: 12)
+                    .cornerRadius(6)
+                Rectangle()
+                    .fill(Color.white.opacity(0.08))
+                    .frame(width: 150, height: 10)
+                    .cornerRadius(5)
+                Spacer()
+            }
+            .padding(.leading, settings.layoutStyle == .overlay ? 30 : 20)
+
+            Spacer()
+        }
+        .background(
+            ZStack {
+                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                backgroundColor
+            }
+        )
+        .cornerRadius(28)
+    }
+}
+
 // Visual Effect View for glassmorphism
 struct VisualEffectView: NSViewRepresentable {
     let material: NSVisualEffectView.Material
@@ -162,5 +235,5 @@ struct VisualEffectView: NSViewRepresentable {
 }
 
 #Preview {
-    ContentView()
+    ContentView(settings: WidgetSettings.shared)
 }

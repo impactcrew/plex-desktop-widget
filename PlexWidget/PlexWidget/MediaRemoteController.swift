@@ -1,5 +1,6 @@
 import Foundation
 import MediaPlayer
+import CoreGraphics
 
 class MediaRemoteController: ObservableObject {
     static let shared = MediaRemoteController()
@@ -74,25 +75,52 @@ class MediaRemoteController: ObservableObject {
         nowPlayingInfo.removeAll()
     }
 
-    // Public methods to trigger playback commands
+    // Public methods to trigger playback commands using media keys
     func play() {
-        handlePlay()
+        sendMediaKey(key: 16) // Play/Pause key
     }
 
     func pause() {
-        handlePause()
+        sendMediaKey(key: 16) // Play/Pause key
     }
 
     func togglePlayPause() {
-        handleTogglePlayPause()
+        sendMediaKey(key: 16) // Play/Pause key
     }
 
     func nextTrack() {
-        handleNext()
+        sendMediaKey(key: 17) // Next track key
     }
 
     func previousTrack() {
-        handlePrevious()
+        sendMediaKey(key: 18) // Previous track key
+    }
+
+    private func sendMediaKey(key: Int32) {
+        // Create keyboard event for media keys
+        guard let event = CGEvent(
+            keyboardEventSource: nil,
+            virtualKey: CGKeyCode(key),
+            keyDown: true
+        ) else {
+            print("Failed to create media key event")
+            return
+        }
+
+        event.flags = CGEventFlags.maskNonCoalesced
+        event.post(tap: .cgSessionEventTap)
+
+        // Key up
+        guard let eventUp = CGEvent(
+            keyboardEventSource: nil,
+            virtualKey: CGKeyCode(key),
+            keyDown: false
+        ) else { return }
+
+        eventUp.flags = CGEventFlags.maskNonCoalesced
+        eventUp.post(tap: .cgSessionEventTap)
+
+        print("Sent media key: \(key)")
     }
 
     // These handlers would need to communicate with Plex

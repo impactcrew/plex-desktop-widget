@@ -39,6 +39,7 @@ struct Player: Codable {
     let address: String?
     let port: String?
     let `protocol`: String?
+    let product: String?
 }
 
 struct Session: Codable {
@@ -56,6 +57,7 @@ struct NowPlaying: Identifiable {
     let viewOffset: Int
     let sessionKey: String?
     let playerAddress: String?
+    let machineIdentifier: String?
 }
 
 class PlexAPI: ObservableObject {
@@ -125,16 +127,20 @@ class PlexAPI: ObservableObject {
                         track.type == "track" &&
                         (track.Player?.state == "playing" || track.Player?.state == "paused")
                     }) {
+                        let playerAddr = playingTrack.Player?.address
+                        let machineId = playingTrack.Player?.machineIdentifier
+
                         nowPlaying = NowPlaying(
                             title: playingTrack.title ?? "Unknown Track",
-                            artist: playingTrack.grandparentTitle ?? playingTrack.originalTitle ?? "Unknown Artist",
+                            artist: playingTrack.originalTitle ?? playingTrack.grandparentTitle ?? "Unknown Artist",
                             album: playingTrack.parentTitle ?? "Unknown Album",
                             albumArtUrl: getAlbumArtUrl(from: playingTrack),
                             state: playingTrack.Player?.state ?? "playing",
                             duration: playingTrack.duration ?? 0,
                             viewOffset: playingTrack.viewOffset ?? 0,
                             sessionKey: playingTrack.sessionKey ?? playingTrack.Session?.id,
-                            playerAddress: playingTrack.Player?.address
+                            playerAddress: playerAddr,
+                            machineIdentifier: machineId
                         )
                         errorMessage = nil
                     } else {
@@ -165,7 +171,82 @@ class PlexAPI: ObservableObject {
     private func getAlbumArtUrl(from track: Track) -> String? {
         let thumbPath = track.thumb ?? track.parentThumb ?? track.grandparentThumb
         guard let thumbPath = thumbPath else { return nil }
-        return "\(serverUrl)\(thumbPath)?X-Plex-Token=\(token)"
+        // Return URL without token - token will be added via HTTP header in image loading
+        return "\(serverUrl)\(thumbPath)"
+    }
+
+    // Helper method to fetch album art with token in header
+    func fetchAlbumArt(url: String) async -> Data? {
+        guard let imageUrl = URL(string: url) else { return nil }
+
+        var request = URLRequest(url: imageUrl)
+        request.setValue(token, forHTTPHeaderField: "X-Plex-Token")
+        request.setValue(clientIdentifier, forHTTPHeaderField: "X-Plex-Client-Identifier")
+        request.timeoutInterval = 10.0
+
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse,
+                  httpResponse.statusCode == 200 else {
+                return nil
+            }
+
+            return data
+        } catch {
+            return nil
+        }
+    }
+
+    // Playback control methods
+    func play() async {
+        await sendPlaybackCommand("/player/playback/play")
+    }
+
+    func pause() async {
+        await sendPlaybackCommand("/player/playback/pause")
+    }
+
+    func togglePlayPause() async {
+        if nowPlaying?.state == "playing" {
+            await pause()
+        } else {
+            await play()
+        }
+    }
+
+    func skipNext() async {
+        await sendPlaybackCommand("/player/playback/skipNext")
+    }
+
+    func skipPrevious() async {
+        await sendPlaybackCommand("/player/playback/skipPrevious")
+    }
+
+    private func sendPlaybackCommand(_ endpoint: String) async {
+        guard let machineId = nowPlaying?.machineIdentifier else {
+            return
+        }
+
+        // For Plex Desktop, send command through the server
+        let commandID = Int.random(in: 1...10000)
+        let fullUrl = "\(serverUrl)\(endpoint)?type=music&commandID=\(commandID)"
+
+        guard let url = URL(string: fullUrl) else {
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(token, forHTTPHeaderField: "X-Plex-Token")
+        request.setValue(clientIdentifier, forHTTPHeaderField: "X-Plex-Client-Identifier")
+        request.setValue(machineId, forHTTPHeaderField: "X-Plex-Target-Client-Identifier")
+
+        do {
+            let (_, _) = try await URLSession.shared.data(for: request)
+        } catch {
+            // Silently fail - playback commands are best-effort
+        }
     }
 
     deinit {
