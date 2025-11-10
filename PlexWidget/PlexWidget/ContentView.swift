@@ -26,6 +26,7 @@ struct ContentView: View {
 
     var placeholderNowPlaying: NowPlaying {
         NowPlaying(
+            id: "placeholder",
             title: "—",
             artist: "—",
             album: "—",

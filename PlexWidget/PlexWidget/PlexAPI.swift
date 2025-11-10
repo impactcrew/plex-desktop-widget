@@ -47,7 +47,7 @@ struct Session: Codable {
 }
 
 struct NowPlaying: Identifiable {
-    let id = UUID()
+    let id: String // Use track's ratingKey as stable ID
     let title: String
     let artist: String
     let album: String
@@ -131,6 +131,7 @@ class PlexAPI: ObservableObject {
                         let machineId = playingTrack.Player?.machineIdentifier
 
                         nowPlaying = NowPlaying(
+                            id: playingTrack.id ?? UUID().uuidString,
                             title: playingTrack.title ?? "Unknown Track",
                             artist: playingTrack.originalTitle ?? playingTrack.grandparentTitle ?? "Unknown Artist",
                             album: playingTrack.parentTitle ?? "Unknown Album",

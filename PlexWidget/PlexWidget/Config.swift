@@ -68,14 +68,15 @@ class ConfigManager {
         // Delete any existing token first
         deleteTokenFromKeychain()
 
+        // For sandboxed apps, we need simpler keychain access without password prompts
+        // Using kSecAttrAccessibleAfterFirstUnlock allows the app to access the keychain
+        // after the user logs in, without requiring additional authentication
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: keychainService,
             kSecAttrAccount as String: tokenAccount,
             kSecValueData as String: tokenData,
-            // Use most restrictive access level - only accessible when device is unlocked
-            // and data is not backed up to iCloud or transferred to other devices
-            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
         ]
 
         let status = SecItemAdd(query as CFDictionary, nil)
