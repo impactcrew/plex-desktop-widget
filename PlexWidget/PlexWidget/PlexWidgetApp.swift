@@ -27,12 +27,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var onboardingWindow: NSWindow?
     var statusBarItem: NSStatusItem?
     var settingsWindow: NSWindow?
-    var settings = WidgetSettings.shared
+    lazy var settings = WidgetSettings.shared
     var clickOutsideMonitor: Any?
+    var cachedConfig: PlexConfig? // Cache config to avoid multiple Keychain accesses
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Check if config exists
-        if ConfigManager.shared.loadConfig() == nil {
+        // Check if user has completed onboarding (doesn't trigger Keychain permission)
+        if !ConfigManager.shared.hasCompletedOnboarding() {
             // Show onboarding - use regular activation policy to show window
             NSApp.setActivationPolicy(.regular)
             showOnboarding()
@@ -75,12 +76,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func showOnboarding() {
         let onboardingView = OnboardingView(
             onComplete: { [weak self] serverUrl, token in
-                // Config saved successfully, close onboarding and show main widget
-                self?.onboardingWindow?.close()
-                self?.onboardingWindow = nil
-                // Switch to accessory mode (menu bar only) and show main widget
-                NSApp.setActivationPolicy(.accessory)
-                self?.showMainWidget()
+                guard let self = self else { return }
+                // Config saved successfully - show alert and quit
+                let alert = NSAlert()
+                alert.messageText = "Setup Complete!"
+                alert.informativeText = "Your Plex credentials have been saved. Please relaunch PlexWidget to start using it."
+                alert.alertStyle = .informational
+                alert.addButton(withTitle: "Quit")
+                alert.runModal()
+                NSApplication.shared.terminate(nil)
             },
             onClose: { [weak self] in
                 // User closed onboarding without completing setup

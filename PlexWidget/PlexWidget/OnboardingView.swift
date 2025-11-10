@@ -217,9 +217,7 @@ struct OnboardingView: View {
                     }
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.black)
-                    .frame(maxWidth: .infinity, minHeight: 44)
-                    .padding(.vertical, 12)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, minHeight: 44, maxHeight: 44)
                     .background(
                         Group {
                             if isFormValid {
@@ -357,7 +355,7 @@ struct OnboardingView: View {
         let cleanToken = token.trimmingCharacters(in: .whitespaces)
 
         // Validate by attempting to connect
-        Task {
+        Task { @MainActor in
             let testAPI = PlexAPI(serverUrl: cleanUrl, token: cleanToken)
 
             // Give it a moment to try fetching
