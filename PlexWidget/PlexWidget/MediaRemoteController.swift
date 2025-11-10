@@ -51,23 +51,27 @@ class MediaRemoteController: ObservableObject {
     }
 
     func updateNowPlayingInfo(title: String, artist: String, album: String, duration: TimeInterval, currentTime: TimeInterval, artwork: MPMediaItemArtwork? = nil) {
-        nowPlayingInfo[MPMediaItemPropertyTitle] = title
-        nowPlayingInfo[MPMediaItemPropertyArtist] = artist
-        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = album
-        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
+        // Disabled to prevent PlexWidget from appearing in macOS sound menu
+        // Plex app already shows there, we don't want duplicate entries
 
-        if let artwork = artwork {
-            nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
-        }
+        // nowPlayingInfo[MPMediaItemPropertyTitle] = title
+        // nowPlayingInfo[MPMediaItemPropertyArtist] = artist
+        // nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = album
+        // nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
+        // nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
+        // nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
 
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        // if let artwork = artwork {
+        //     nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+        // }
+
+        // MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 
     func updatePlaybackState(isPlaying: Bool) {
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? 1.0 : 0.0
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        // Disabled to prevent PlexWidget from appearing in macOS sound menu
+        // nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? 1.0 : 0.0
+        // MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 
     func clearNowPlayingInfo() {
