@@ -356,20 +356,53 @@ struct OnboardingView: View {
 
         // Validate by attempting to connect
         Task { @MainActor in
+            print("DEBUG Onboarding: Testing connection to \(cleanUrl)")
             let testAPI = PlexAPI(serverUrl: cleanUrl, token: cleanToken)
 
-            // Give it a moment to try fetching
-            try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            // Actually fetch to test the connection
+            await testAPI.fetchNowPlaying()
+
+            // Give it a moment to complete
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
             await MainActor.run {
+                print("DEBUG Onboarding: API error = \(testAPI.errorMessage ?? "nil"), isLoading = \(testAPI.isLoading)")
+
                 if let error = testAPI.errorMessage {
                     // Connection failed - show error with animation
+                    print("DEBUG Onboarding: Connection failed with error: \(error)")
                     withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                        errorMessage = "Failed to connect: \(error)"
+                        errorMessage = error
                         isValidating = false
+                    }
+                } else if testAPI.isLoading {
+                    // Still loading, wait a bit more
+                    print("DEBUG Onboarding: Still loading, waiting...")
+                    Task {
+                        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 more second
+                        await MainActor.run {
+                            if let error = testAPI.errorMessage {
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                    errorMessage = error
+                                    isValidating = false
+                                }
+                            } else {
+                                // Success! Save the config
+                                print("DEBUG Onboarding: Connection successful, saving config")
+                                if ConfigManager.shared.saveConfig(serverUrl: cleanUrl, token: cleanToken) {
+                                    onComplete(cleanUrl, cleanToken)
+                                } else {
+                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                        errorMessage = "Failed to save configuration"
+                                        isValidating = false
+                                    }
+                                }
+                            }
+                        }
                     }
                 } else {
                     // Success! Save the config
+                    print("DEBUG Onboarding: Connection successful, saving config")
                     if ConfigManager.shared.saveConfig(serverUrl: cleanUrl, token: cleanToken) {
                         onComplete(cleanUrl, cleanToken)
                     } else {

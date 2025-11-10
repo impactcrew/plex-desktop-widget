@@ -90,6 +90,35 @@ struct SettingsView: View {
                 .padding(12)
                 .background(Color.white.opacity(0.1))
                 .cornerRadius(10)
+
+                // Divider
+                Rectangle()
+                    .fill(Color.white.opacity(0.1))
+                    .frame(height: 1)
+
+                // Quit PlexWidget
+                Button(action: {
+                    NSApplication.shared.terminate(nil)
+                }) {
+                    HStack {
+                        Image(systemName: "power")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.white.opacity(0.8))
+
+                        Text("Quit PlexWidget")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.white)
+
+                        Spacer()
+                    }
+                    .padding(12)
+                    .background(Color.white.opacity(0.05))
+                    .cornerRadius(10)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .onHover { hovering in
+                    // Hover effect handled by cursor change
+                }
             }
             .padding(24)
             .background(

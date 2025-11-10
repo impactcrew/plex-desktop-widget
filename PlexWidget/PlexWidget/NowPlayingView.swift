@@ -412,6 +412,8 @@ struct AlbumArtView: View {
             loadImage()
         }
         .onChange(of: url) { _ in
+            // Clear old image immediately when URL changes
+            image = nil
             loadImage()
         }
     }

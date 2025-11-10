@@ -32,8 +32,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var cachedConfig: PlexConfig? // Cache config to avoid multiple Keychain accesses
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Check if user has completed onboarding (doesn't trigger Keychain permission)
-        if !ConfigManager.shared.hasCompletedOnboarding() {
+        // Check if user has completed onboarding AND config can be loaded
+        // This prevents corrupted state where URL exists but token doesn't
+        if !ConfigManager.shared.hasCompletedOnboarding() || ConfigManager.shared.loadConfig() == nil {
             // Show onboarding - use regular activation policy to show window
             NSApp.setActivationPolicy(.regular)
             showOnboarding()
