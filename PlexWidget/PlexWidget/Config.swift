@@ -15,22 +15,46 @@ class ConfigManager {
 
     private init() {}
 
+    func hasCompletedOnboarding() -> Bool {
+        // Check UserDefaults only (doesn't trigger Keychain permission)
+        return loadServerUrlFromUserDefaults() != nil
+    }
+
     func loadConfig() -> PlexConfig? {
+        #if DEBUG
+        // TEMPORARY: Load from UserDefaults for testing
+        if let serverUrl = UserDefaults.standard.string(forKey: serverUrlKey),
+           let token = UserDefaults.standard.string(forKey: "plex-token-debug") {
+            return PlexConfig(plexServerUrl: serverUrl, plexToken: token)
+        }
+        return nil
+        #else
         // Load from Keychain
         if let token = loadTokenFromKeychain(),
            let serverUrl = loadServerUrlFromUserDefaults() {
             return PlexConfig(plexServerUrl: serverUrl, plexToken: token)
         }
-
         return nil
+        #endif
     }
 
     func saveConfig(serverUrl: String, token: String) -> Bool {
-        // Save server URL to UserDefaults (non-sensitive)
+        // TEMPORARY: Save both to UserDefaults for testing
+        #if DEBUG
         UserDefaults.standard.set(serverUrl, forKey: serverUrlKey)
+        UserDefaults.standard.set(token, forKey: "plex-token-debug")
+        print("DEBUG: Saved to UserDefaults only (skipping Keychain)")
+        return true
+        #else
+        // Save token to Keychain first (secure) - this is the critical operation
+        guard saveTokenToKeychain(token) else {
+            return false
+        }
 
-        // Save token to Keychain (secure)
-        return saveTokenToKeychain(token)
+        // Only save server URL to UserDefaults if Keychain save succeeded
+        UserDefaults.standard.set(serverUrl, forKey: serverUrlKey)
+        return true
+        #endif
     }
 
     // MARK: - Keychain Operations
