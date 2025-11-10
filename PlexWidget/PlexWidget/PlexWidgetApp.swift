@@ -27,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var onboardingWindow: NSWindow?
     var statusBarItem: NSStatusItem?
     var settingsWindow: NSWindow?
-    lazy var settings = WidgetSettings.shared
+    var settings = WidgetSettings.shared
     var clickOutsideMonitor: Any?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
