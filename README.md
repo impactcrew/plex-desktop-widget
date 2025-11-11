@@ -41,13 +41,13 @@ Download the DMG installer from the [Releases](https://github.com/impactcrew/ple
 1. Download the latest `PlexWidget.dmg` from the Releases page
 2. Open the DMG file
 3. Drag `PlexWidget.app` to the `Applications` folder
-4. **Right-click** `PlexWidget.app` in Applications and select **"Open"**
-5. Click **"Open"** in the security dialog to bypass Gatekeeper
-6. If you see a "no internet connection" error during onboarding:
-   - Go to **System Settings** > **Privacy & Security**
-   - Scroll down and click **"Open Anyway"** next to the PlexWidget message
-   - **OR** run this Terminal command: `sudo xattr -rd com.apple.quarantine /Applications/PlexWidget.app`
-7. Relaunch PlexWidget and complete the onboarding setup
+4. Open `PlexWidget.app` (you'll see a security warning - this is normal)
+5. Go to **System Settings** > **Privacy & Security** and click **"Open Anyway"**
+6. Run this Terminal command to enable network access:
+   ```bash
+   sudo xattr -rd com.apple.quarantine /Applications/PlexWidget.app
+   ```
+7. Launch PlexWidget and complete the onboarding setup
 8. Grant Keychain access when prompted
 
 **Universal Binary:** Works natively on both Intel (x86_64) and Apple Silicon (arm64) Macs.
