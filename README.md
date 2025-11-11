@@ -43,7 +43,7 @@ Download the DMG installer from the [Releases](https://github.com/impactcrew/ple
 3. Drag `PlexWidget.app` to the `Applications` folder
 4. Open `PlexWidget.app` (you'll see a security warning - this is normal)
 5. Go to **System Settings** > **Privacy & Security** and click **"Open Anyway"**
-6. Run this Terminal command to enable network access:¹
+6. Run this Terminal command to enable network access: ¹
    ```bash
    sudo xattr -rd com.apple.quarantine /Applications/PlexWidget.app
    ```
