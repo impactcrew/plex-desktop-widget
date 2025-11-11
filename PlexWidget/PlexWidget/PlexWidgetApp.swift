@@ -78,20 +78,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let onboardingView = OnboardingView(
             onComplete: { [weak self] serverUrl, token in
                 guard let self = self else { return }
-                // Config saved successfully - show alert and quit
-                let alert = NSAlert()
-                alert.messageText = "Setup Complete!"
-                alert.informativeText = "Your Plex credentials have been saved. Please relaunch PlexWidget to start using it."
-                alert.alertStyle = .informational
-                alert.addButton(withTitle: "Quit")
-                alert.runModal()
-                NSApplication.shared.terminate(nil)
+
+                // Close onboarding window first to avoid window server conflicts
+                self.onboardingWindow?.close()
+                self.onboardingWindow = nil
+
+                // Small delay to ensure window cleanup completes before activation policy change
+                // This prevents potential window server errors when transitioning
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    // Change to accessory mode (menu bar only)
+                    NSApp.setActivationPolicy(.accessory)
+
+                    // Show main widget directly instead of terminating
+                    self.showMainWidget()
+                }
             },
             onClose: { [weak self] in
+                guard let self = self else { return }
                 // User closed onboarding without completing setup
-                self?.onboardingWindow?.close()
-                self?.onboardingWindow = nil
-                NSApplication.shared.terminate(nil)
+                self.onboardingWindow?.close()
+                self.onboardingWindow = nil
+
+                // Ensure we're in a clean state before terminating
+                // This avoids EXC_BAD_ACCESS crashes during autorelease pool cleanup
+                DispatchQueue.main.async {
+                    // Let the current run loop complete to finish window cleanup
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        NSApplication.shared.terminate(nil)
+                    }
+                }
             }
         )
 

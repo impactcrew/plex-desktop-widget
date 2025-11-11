@@ -357,62 +357,87 @@ struct OnboardingView: View {
         // Validate by attempting to connect
         Task { @MainActor in
             print("DEBUG Onboarding: Testing connection to \(cleanUrl)")
-            let testAPI = PlexAPI(serverUrl: cleanUrl, token: cleanToken)
 
-            // Actually fetch to test the connection
-            await testAPI.fetchNowPlaying()
+            // Create test API instance and validate connection
+            // We perform the validation inline to ensure proper async/await sequencing
+            let testResult = await validatePlexConnection(serverUrl: cleanUrl, token: cleanToken)
 
-            // Give it a moment to complete
-            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+            print("DEBUG Onboarding: Validation result - success: \(testResult.success), error: \(testResult.error ?? "nil")")
 
-            await MainActor.run {
-                print("DEBUG Onboarding: API error = \(testAPI.errorMessage ?? "nil"), isLoading = \(testAPI.isLoading)")
-
-                if let error = testAPI.errorMessage {
-                    // Connection failed - show error with animation
-                    print("DEBUG Onboarding: Connection failed with error: \(error)")
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                        errorMessage = error
-                        isValidating = false
-                    }
-                } else if testAPI.isLoading {
-                    // Still loading, wait a bit more
-                    print("DEBUG Onboarding: Still loading, waiting...")
-                    Task {
-                        try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 more second
-                        await MainActor.run {
-                            if let error = testAPI.errorMessage {
-                                withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                                    errorMessage = error
-                                    isValidating = false
-                                }
-                            } else {
-                                // Success! Save the config
-                                print("DEBUG Onboarding: Connection successful, saving config")
-                                if ConfigManager.shared.saveConfig(serverUrl: cleanUrl, token: cleanToken) {
-                                    onComplete(cleanUrl, cleanToken)
-                                } else {
-                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                                        errorMessage = "Failed to save configuration"
-                                        isValidating = false
-                                    }
-                                }
-                            }
-                        }
-                    }
+            if let error = testResult.error {
+                // Connection failed - show error with animation
+                print("DEBUG Onboarding: Connection failed with error: \(error)")
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                    errorMessage = error
+                    isValidating = false
+                }
+            } else {
+                // Success! Save the config
+                print("DEBUG Onboarding: Connection successful, saving config")
+                if ConfigManager.shared.saveConfig(serverUrl: cleanUrl, token: cleanToken) {
+                    // Call onComplete BEFORE setting isValidating = false
+                    // This ensures proper cleanup order when the window closes
+                    onComplete(cleanUrl, cleanToken)
                 } else {
-                    // Success! Save the config
-                    print("DEBUG Onboarding: Connection successful, saving config")
-                    if ConfigManager.shared.saveConfig(serverUrl: cleanUrl, token: cleanToken) {
-                        onComplete(cleanUrl, cleanToken)
-                    } else {
-                        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                            errorMessage = "Failed to save configuration"
-                            isValidating = false
-                        }
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                        errorMessage = "Failed to save configuration"
+                        isValidating = false
                     }
                 }
             }
+        }
+    }
+
+    /// Validates Plex server connection by performing a test API call
+    /// Returns a tuple with success status and optional error message
+    /// NOTE: This function performs network I/O and should NOT run on MainActor
+    private func validatePlexConnection(serverUrl: String, token: String) async -> (success: Bool, error: String?) {
+        guard let url = URL(string: "\(serverUrl)/status/sessions") else {
+            return (false, "Invalid server URL format")
+        }
+
+        var request = URLRequest(url: url)
+        request.setValue(token, forHTTPHeaderField: "X-Plex-Token")
+        request.setValue("plex-desktop-widget-validation", forHTTPHeaderField: "X-Plex-Client-Identifier")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = 10.0
+
+        do {
+            // Perform network call on background thread (not MainActor)
+            // This prevents crashes during URLSession SSL handshake and DNS resolution
+            let (_, response) = try await URLSession.shared.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                return (false, "Invalid response from server")
+            }
+
+            switch httpResponse.statusCode {
+            case 200:
+                return (true, nil)
+            case 401:
+                return (false, "Invalid Plex token - authentication failed")
+            case 404:
+                return (false, "Server endpoint not found - check your server URL")
+            case 500...599:
+                return (false, "Server error (\(httpResponse.statusCode))")
+            default:
+                return (false, "Unexpected server response (\(httpResponse.statusCode))")
+            }
+        } catch let error as NSError {
+            // Handle specific network errors
+            if error.domain == NSURLErrorDomain {
+                switch error.code {
+                case NSURLErrorTimedOut:
+                    return (false, "Connection timed out - server may be unreachable")
+                case NSURLErrorCannotConnectToHost, NSURLErrorCannotFindHost:
+                    return (false, "Cannot connect to server - check URL and network")
+                case NSURLErrorNetworkConnectionLost:
+                    return (false, "Network connection lost")
+                default:
+                    return (false, "Network error: \(error.localizedDescription)")
+                }
+            }
+            return (false, "Connection failed: \(error.localizedDescription)")
         }
     }
 }

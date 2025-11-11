@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plex Desktop Widget - GitHub Repository</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.5;
+        }
+
+        .github-header {
+            background: #161b22;
+            border-bottom: 1px solid #21262d;
+            padding: 16px 32px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+
+        .repo-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .repo-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        .repo-visibility {
+            padding: 2px 8px;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #7d8590;
+        }
+
+        .repo-stats {
+            display: flex;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #7d8590;
+            font-size: 12px;
+        }
+
+        .stat-item svg {
+            fill: currentColor;
+        }
+
+        .tabs {
+            border-bottom: 1px solid #21262d;
+            margin-bottom: 24px;
+        }
+
+        .tab {
+            display: inline-block;
+            padding: 8px 16px;
+            color: #c9d1d9;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom-color: #f78166;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+        }
+
+        .main-content {
+            min-width: 0;
+        }
+
+        .about-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .about-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .about-desc {
+            color: #7d8590;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .topic {
+            background: #1f6feb;
+            color: #c9d1d9;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .readme {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 24px;
+        }
+
+        .readme-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px 6px 0 0;
+            margin: -24px -24px 24px -24px;
+        }
+
+        .readme h1 {
+            font-size: 32px;
+            border-bottom: 1px solid #21262d;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+
+        .readme h2 {
+            font-size: 24px;
+            margin-top: 24px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #21262d;
+            padding-bottom: 8px;
+        }
+
+        .readme h3 {
+            font-size: 18px;
+            margin-top: 16px;
+            margin-bottom: 12px;
+        }
+
+        .readme p {
+            margin-bottom: 16px;
+            color: #c9d1d9;
+        }
+
+        .readme ul, .readme ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .readme li {
+            margin-bottom: 8px;
+        }
+
+        .readme code {
+            background: #161b22;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .readme pre {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+
+        .readme pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .screenshot {
+            max-width: 100%;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .badge {
+            margin-right: 4px;
+        }
+
+        .release-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .release-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .release-version {
+            color: #58a6ff;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .file-browser {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .file-header {
+            background: #161b22;
+            padding: 8px 16px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-list {
+            list-style: none;
+        }
+
+        .file-item {
+            padding: 8px 16px;
+            border-bottom: 1px solid #21262d;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-item:hover {
+            background: #161b22;
+        }
+
+        .file-icon {
+            width: 16px;
+            height: 16px;
+            fill: #7d8590;
+        }
+
+        .file-name {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        .languages {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .language-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: #21262d;
+            margin: 8px 0;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .language-segment {
+            height: 100%;
+        }
+
+        .language-list {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .language-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .language-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        a {
+            color: #58a6ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="github-header">
+        <div class="container">
+            <svg height="32" width="32" fill="#c9d1d9" viewBox="0 0 16 16">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="repo-header">
+            <a href="#" class="repo-name">
+                <svg height="16" width="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom;">
+                    <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path>
+                </svg>
+                plex-desktop-widget
+            </a>
+            <span class="repo-visibility">Public</span>
+        </div>
+
+        <p style="color: #7d8590; margin-bottom: 16px;">A macOS desktop widget that displays currently playing Plex media with elegant album art overlay</p>
+
+        <div class="repo-stats">
+            <div class="stat-item">
+                <svg height="16" width="16" viewBox="0 0 16 16">
+                    <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"></path>
+                </svg>
+                <span><strong>247</strong> stars</span>
+            </div>
+            <div class="stat-item">
+                <svg height="16" width="16" viewBox="0 0 16 16">
+                    <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"></path>
+                </svg>
+                <span><strong>18</strong> forks</span>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <a href="#" class="tab active">Code</a>
+            <a href="#" class="tab">Issues</a>
+            <a href="#" class="tab">Pull requests</a>
+            <a href="#" class="tab">Discussions</a>
+        </div>
+
+        <div class="content-grid">
+            <div class="main-content">
+                <div class="file-browser">
+                    <div class="file-header">
+                        <span style="color: #7d8590; font-size: 14px;">
+                            <strong>main</strong>
+                            <span style="margin: 0 8px;">·</span>
+                            d1ad12e
+                        </span>
+                        <span style="color: #7d8590; font-size: 12px;">Latest commit</span>
+                    </div>
+                    <ul class="file-list">
+                        <li class="file-item">
+                            <svg class="file-icon" viewBox="0 0 16 16">
+                                <path d="M.513 1.513A1.75 1.75 0 0 1 1.75 1h3.5c.55 0 1.07.26 1.4.7l.9 1.2a.25.25 0 0 0 .2.1H13a1.75 1.75 0 0 1 1.75 1.75v8.5A1.75 1.75 0 0 1 13 15H1.75A1.75 1.75 0 0 1 0 13.25V2.75c0-.464.184-.91.513-1.237Z"></path>
+                            </svg>
+                            <a href="#" class="file-name">.design-assets</a>
+                        </li>
+                        <li class="file-item">
+                            <svg class="file-icon" viewBox="0 0 16 16">
+                                <path d="M.513 1.513A1.75 1.75 0 0 1 1.75 1h3.5c.55 0 1.07.26 1.4.7l.9 1.2a.25.25 0 0 0 .2.1H13a1.75 1.75 0 0 1 1.75 1.75v8.5A1.75 1.75 0 0 1 13 15H1.75A1.75 1.75 0 0 1 0 13.25V2.75c0-.464.184-.91.513-1.237Z"></path>
+                            </svg>
+                            <a href="#" class="file-name">PlexWidget</a>
+                        </li>
+                        <li class="file-item">
+                            <svg class="file-icon" viewBox="0 0 16 16">
+                                <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
+                            </svg>
+                            <a href="#" class="file-name">.gitignore</a>
+                        </li>
+                        <li class="file-item">
+                            <svg class="file-icon" viewBox="0 0 16 16">
+                                <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
+                            </svg>
+                            <a href="#" class="file-name">LICENSE</a>
+                        </li>
+                        <li class="file-item">
+                            <svg class="file-icon" viewBox="0 0 16 16">
+                                <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
+                            </svg>
+                            <a href="#" class="file-name">README.md</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="readme">
+                    <div class="readme-header">
+                        <svg height="16" width="16" fill="#7d8590" viewBox="0 0 16 16">
+                            <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path>
+                        </svg>
+                        <span style="font-weight: 600;">README.md</span>
+                    </div>
+
+                    <h1>Plex Desktop Widget</h1>
+
+                    <p>
+                        <img src="https://img.shields.io/badge/version-1.0-blue.svg" alt="Version" class="badge">
+                        <img src="https://img.shields.io/badge/platform-macOS-blue.svg" alt="Platform" class="badge">
+                        <img src="https://img.shields.io/badge/Swift-5.9-orange.svg" alt="Swift" class="badge">
+                        <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License" class="badge">
+                    </p>
+
+                    <p>A beautiful, lightweight macOS desktop widget that displays your currently playing Plex media with album artwork and track information. Designed to match the native macOS aesthetic with a modern, glassmorphic overlay.</p>
+
+                    <p style="text-align: center; margin: 32px 0;">
+                        <img src="Screenshot.png" alt="Plex Desktop Widget" class="screenshot" style="max-width: 100%; border-radius: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);">
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0;">
+                        <div>
+                            <img src="Onboarding.webp" alt="Onboarding screen" class="screenshot">
+                            <p style="text-align: center; font-size: 12px; color: #7d8590; margin-top: 8px;">Onboarding</p>
+                        </div>
+                        <div>
+                            <img src="Settings.webp" alt="Settings panel" class="screenshot">
+                            <p style="text-align: center; font-size: 12px; color: #7d8590; margin-top: 8px;">Settings</p>
+                        </div>
+                        <div>
+                            <img src="Player.webp" alt="Widget player modes" class="screenshot">
+                            <p style="text-align: center; font-size: 12px; color: #7d8590; margin-top: 8px;">Player Modes</p>
+                        </div>
+                    </div>
+
+                    <h2>Features</h2>
+
+                    <ul>
+                        <li><strong>Menu Bar Integration</strong> - Menu bar icon with Plex chevron for quick access to settings</li>
+                        <li><strong>Beautiful Album Art</strong> - Displays high-quality album artwork with customizable shapes (square, rounded, circle)</li>
+                        <li><strong>Smooth Track Transitions</strong> - Album art persists during track changes for seamless playback experience</li>
+                        <li><strong>Real-time Updates</strong> - Automatically polls and updates as your playback changes (2-second interval)</li>
+                        <li><strong>Native macOS Design</strong> - Glassmorphic overlay with smooth animations</li>
+                        <li><strong>Secure Authentication</strong> - Token stored securely in macOS Keychain</li>
+                        <li><strong>First-run Onboarding</strong> - Easy setup with guided onboarding and connection validation</li>
+                        <li><strong>Customizable Appearance</strong> - Theme (Light/Dark), Layout (Side/Overlay), Glow colors</li>
+                        <li><strong>Universal Binary</strong> - Optimized for both Intel and Apple Silicon Macs</li>
+                        <li><strong>Hidden from Sound Menu</strong> - Doesn't clutter macOS sound menu (Plex already shows there)</li>
+                    </ul>
+
+                    <h2>Installation</h2>
+
+                    <h3>From Source</h3>
+                    <ol>
+                        <li>Clone this repository</li>
+                        <li>Navigate to <code>PlexWidget/</code> directory</li>
+                        <li>Run <code>./build.sh</code> to create universal binary</li>
+                        <li>Copy <code>build/PlexWidget.app</code> to your Applications folder</li>
+                        <li>Launch PlexWidget and complete the onboarding setup</li>
+                        <li>Grant necessary permissions when prompted</li>
+                    </ol>
+
+                    <h3>Pre-built Release (Coming Soon)</h3>
+                    <p>Pre-built DMG packages will be available in the <a href="#">Releases</a> page once v1.0.0 is officially released.</p>
+
+                    <h2>Requirements</h2>
+
+                    <ul>
+                        <li>macOS 13.0 (Ventura) or later</li>
+                        <li>Compatible with both Intel and Apple Silicon Macs (Universal Binary)</li>
+                        <li>Active Plex Media Server</li>
+                        <li>Plex account with authentication token</li>
+                    </ul>
+
+                    <h2>Configuration</h2>
+
+                    <p>On first launch, the widget will guide you through a simple onboarding process:</p>
+
+                    <ol>
+                        <li><strong>Server URL</strong> - Enter your Plex server URL (e.g., <code>http://localhost:32400</code>)</li>
+                        <li><strong>Authentication Token</strong> - Provide your Plex authentication token</li>
+                        <li><strong>Permissions</strong> - Grant accessibility and app monitoring permissions</li>
+                    </ol>
+
+                    <p>To get your Plex token, see <a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/">Plex's official guide</a>.</p>
+
+                    <h2>Settings</h2>
+
+                    <p>Access settings from the menu bar icon to customize:</p>
+
+                    <ul>
+                        <li>Theme (Light/Dark)</li>
+                        <li>Layout (Side/Overlay)</li>
+                        <li>Album art shape (Square/Circular)</li>
+                        <li>Glow (on/off, color: blue, purple, pink, orange, green, cyan)</li>
+                    </ul>
+
+                    <h2>Architecture</h2>
+
+                    <p>Built with modern Swift and SwiftUI:</p>
+
+                    <ul>
+                        <li><strong>SwiftUI</strong> - Declarative UI framework</li>
+                        <li><strong>Combine</strong> - Reactive programming for real-time updates</li>
+                        <li><strong>Keychain Services</strong> - Secure credential storage</li>
+                        <li><strong>NSWorkspace</strong> - App monitoring and detection</li>
+                        <li><strong>UserDefaults</strong> - Settings persistence</li>
+                    </ul>
+
+                    <h2>Building from Source</h2>
+
+                    <h3>Prerequisites</h3>
+                    <ul>
+                        <li>Xcode 15.0 or later</li>
+                        <li>macOS 13.0 (Ventura) or later</li>
+                        <li>Command Line Tools installed</li>
+                    </ul>
+
+                    <h3>Build Instructions</h3>
+                    <pre><code># Clone the repository
+git clone https://github.com/YOUR_USERNAME/plex-desktop-widget.git
+cd plex-desktop-widget/PlexWidget
+
+# Run the build script (creates universal binary)
+./build.sh
+
+# The app will be at: build/PlexWidget.app
+# Copy to Applications folder
+cp -r build/PlexWidget.app /Applications/</code></pre>
+
+                    <h2>Development</h2>
+
+                    <h3>Project Structure</h3>
+                    <pre><code>PlexWidget/
+├── PlexWidget/
+│   ├── PlexWidgetApp.swift       # Main app entry point
+│   ├── ContentView.swift          # Main widget view
+│   ├── OnboardingView.swift       # First-run setup
+│   ├── SettingsView.swift         # Settings panel
+│   ├── NowPlayingView.swift       # Now playing display
+│   ├── PlexAPI.swift              # Plex API integration (display only)
+│   ├── Config.swift               # Configuration manager
+│   ├── MediaRemoteController.swift # Media remote integration (legacy)
+│   ├── PlexAppMonitor.swift       # App detection
+│   ├── LaunchAtLogin.swift        # Launch on login helper
+│   └── WidgetSettings.swift       # Settings model
+└── Assets.xcassets/               # Icons and resources</code></pre>
+
+                    <h3>Contributing</h3>
+
+                    <p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
+
+                    <ol>
+                        <li>Fork the repository</li>
+                        <li>Create your feature branch (<code>git checkout -b feature/amazing-feature</code>)</li>
+                        <li>Commit your changes (<code>git commit -m 'Add amazing feature'</code>)</li>
+                        <li>Push to the branch (<code>git push origin feature/amazing-feature</code>)</li>
+                        <li>Open a Pull Request</li>
+                    </ol>
+
+                    <h2>Troubleshooting</h2>
+
+                    <h3>Widget Not Showing</h3>
+                    <ul>
+                        <li>Ensure Plex is actively playing media</li>
+                        <li>Check that your Plex server is accessible</li>
+                        <li>Verify server URL and token are correct in settings</li>
+                        <li>Check Console.app for error logs (filter by "PlexWidget")</li>
+                    </ul>
+
+                    <h3>Gatekeeper Warning</h3>
+                    <ul>
+                        <li>Right-click PlexWidget.app and select "Open" (first launch only)</li>
+                        <li>Click "Open" in the security dialog</li>
+                        <li>App is not code-signed (requires $99/year Apple Developer Program)</li>
+                    </ul>
+
+                    <h3>App Crashes During Onboarding</h3>
+                    <ul>
+                        <li>This is a known intermittent issue (see Known Issues section)</li>
+                        <li>Simply relaunch the app - your credentials are saved</li>
+                        <li>If crash persists, check crash logs: <code>~/Library/Logs/DiagnosticReports/PlexWidget*</code></li>
+                        <li>Please report crash logs in GitHub Issues to help us fix this</li>
+                    </ul>
+
+
+                    <h2>Privacy</h2>
+
+                    <p>This app:</p>
+                    <ul>
+                        <li>Stores your Plex token securely in macOS Keychain</li>
+                        <li>Communicates only with your specified Plex server</li>
+                        <li>Does not collect or transmit any usage data</li>
+                        <li>Does not require internet access beyond your Plex server</li>
+                    </ul>
+
+                    <h2>Recent Updates</h2>
+
+                    <ul>
+                        <li><strong>Code cleanup</strong> - Removed non-functional playback control code (~200 lines)</li>
+                        <li><strong>Improved threading</strong> - Resolved @MainActor threading issues with network I/O</li>
+                        <li><strong>Smooth track transitions</strong> - Album art now persists during track changes (no flicker)</li>
+                        <li><strong>Seamless onboarding</strong> - Smooth window transition instead of app termination</li>
+                        <li><strong>Menu bar quit button</strong> - Added quit option in settings panel</li>
+                        <li><strong>Universal binary</strong> - Built for both Intel and Apple Silicon Macs</li>
+                        <li><strong>Hidden from sound menu</strong> - No longer appears in macOS sound menu</li>
+                    </ul>
+
+                    <h2>Known Issues</h2>
+
+                    <h3>Intermittent Crash After Onboarding</h3>
+                    <p><strong>Status:</strong> Under Investigation</p>
+                    <p>Some users have reported an intermittent crash that occurs after completing the onboarding process. This issue is not consistently reproducible:</p>
+                    <ul>
+                        <li>Crash may occur during or immediately after onboarding validation</li>
+                        <li>Does not affect all users or all launches</li>
+                        <li>App generally runs stably once past the initial onboarding</li>
+                    </ul>
+                    <p><strong>Workaround:</strong> If the app crashes during onboarding, simply relaunch it. Your credentials will be saved and the app should start normally.</p>
+                    <p><em>We are actively investigating this issue and working on a fix for the next release.</em></p>
+
+                    <h2>Known Limitations</h2>
+
+                    <h3>Playback Control Not Supported</h3>
+
+                    <p>PlexWidget cannot add play/pause/skip buttons due to fundamental limitations in Plex's architecture:</p>
+
+                    <ul>
+                        <li><strong>Plex Companion Protocol</strong> - Exclusive to official Plex applications only</li>
+                        <li><strong>No Third-Party Discovery</strong> - Third-party apps cannot be discovered or targeted for playback control</li>
+                        <li><strong>Controller-Only Desktop App</strong> - The macOS Plex app functions only as a controller, not a receiver</li>
+                        <li><strong>No Public API</strong> - No public API exists for remote playback control</li>
+                    </ul>
+
+                    <p><em>This is not a bug or missing feature - it's an architectural restriction enforced by Plex. We investigated multiple approaches and found no viable solution for third-party playback control.</em></p>
+
+                    <h2>Upcoming Development</h2>
+
+                    <ul>
+                        <li>Mini mode for smaller screens</li>
+                        <li>Windows version</li>
+                    </ul>
+
+                    <h2>License</h2>
+
+                    <p>This project is licensed under the MIT License - see the <a href="#">LICENSE</a> file for details.</p>
+
+                    <h2>Acknowledgments</h2>
+
+                    <ul>
+                        <li>Built for the <a href="https://www.plex.tv/">Plex</a> community</li>
+                        <li>Designed & Developed by <a href="https://impactcrew.com.au">IMPACT Crew</a></li>
+                    </ul>
+
+                    <hr style="border: 0; border-top: 1px solid #21262d; margin: 24px 0;">
+
+                    <p style="text-align: center; color: #7d8590; font-size: 14px;">
+                        Made for the macOS community
+                    </p>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="about-section">
+                    <div class="about-title">About</div>
+                    <div class="about-desc">A macOS menu bar widget for displaying currently playing Plex media</div>
+
+                    <div class="topics">
+                        <a href="#" class="topic">plex</a>
+                        <a href="#" class="topic">macos</a>
+                        <a href="#" class="topic">swift</a>
+                        <a href="#" class="topic">swiftui</a>
+                        <a href="#" class="topic">menu-bar</a>
+                        <a href="#" class="topic">widget</a>
+                        <a href="#" class="topic">now-playing</a>
+                    </div>
+
+                    <div style="font-size: 12px; color: #7d8590; margin-top: 16px;">
+                        <div style="margin-bottom: 8px;">
+                            <svg height="16" width="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 4px;">
+                                <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+                            </svg>
+                            <strong>247</strong> stars
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <svg height="16" width="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 4px;">
+                                <path d="M8 8.75a.75.75 0 0 0-.75.75v.75h-.75a.75.75 0 0 0 0 1.5h.75v.75a.75.75 0 0 0 1.5 0v-.75h.75a.75.75 0 0 0 0-1.5h-.75V9.5A.75.75 0 0 0 8 8.75Z"></path>
+                                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path>
+                            </svg>
+                            <strong>18</strong> watching
+                        </div>
+                        <div>
+                            <svg height="16" width="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 4px;">
+                                <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"></path>
+                            </svg>
+                            <strong>18</strong> forks
+                        </div>
+                    </div>
+                </div>
+
+                <div class="release-box">
+                    <div class="release-title">
+                        <svg height="16" width="16" fill="#7d8590" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 4px;">
+                            <path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"></path>
+                        </svg>
+                        Releases
+                    </div>
+                    <div style="color: #7d8590; font-size: 14px; margin-top: 8px;">
+                        <strong>v1.0.0</strong> - Coming Soon
+                    </div>
+                    <div style="color: #7d8590; font-size: 12px; margin-top: 8px;">
+                        Pre-built releases will be available once the intermittent crash issue is resolved. In the meantime, please build from source.
+                    </div>
+                </div>
+
+                <div class="languages">
+                    <div class="about-title">Languages</div>
+                    <div class="language-bar">
+                        <div class="language-segment" style="width: 94%; background: #f05138;"></div>
+                        <div class="language-segment" style="width: 6%; background: #563d7c;"></div>
+                    </div>
+                    <ul class="language-list">
+                        <li class="language-item">
+                            <div class="language-dot" style="background: #f05138;"></div>
+                            <span>Swift</span>
+                            <span style="margin-left: auto; color: #7d8590;">94.2%</span>
+                        </li>
+                        <li class="language-item">
+                            <div class="language-dot" style="background: #563d7c;"></div>
+                            <span>Other</span>
+                            <span style="margin-left: auto; color: #7d8590;">5.8%</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

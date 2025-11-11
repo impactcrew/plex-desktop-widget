@@ -36,6 +36,8 @@ struct ContentView: View {
             viewOffset: 0,
             sessionKey: nil,
             playerAddress: nil,
+            playerPort: nil,
+            playerProtocol: nil,
             machineIdentifier: nil
         )
     }

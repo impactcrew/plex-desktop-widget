@@ -411,15 +411,20 @@ struct AlbumArtView: View {
         .onAppear {
             loadImage()
         }
-        .onChange(of: url) { _ in
-            // Clear old image immediately when URL changes
-            image = nil
-            loadImage()
+        .onChange(of: url) { newUrl in
+            // If new URL exists, don't clear - let new image replace old one
+            // If URL is nil (playback stopped), clear immediately
+            if newUrl == nil {
+                image = nil
+            } else {
+                loadImage()
+            }
         }
     }
 
     private func loadImage() {
         guard let urlString = url else {
+            // Clear image if URL is nil (track ended or no artwork)
             image = nil
             return
         }
@@ -429,9 +434,11 @@ struct AlbumArtView: View {
             if let data = await plexAPI.fetchAlbumArt(url: urlString),
                let nsImage = NSImage(data: data) {
                 await MainActor.run {
+                    // Only update once new artwork loads - keeps old artwork visible during transitions
                     self.image = nsImage
                 }
             }
+            // Note: If fetch fails, we keep the old image visible rather than clearing it
         }
     }
 }

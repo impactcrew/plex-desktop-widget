@@ -57,9 +57,12 @@ struct NowPlaying: Identifiable {
     let viewOffset: Int
     let sessionKey: String?
     let playerAddress: String?
+    let playerPort: String?
+    let playerProtocol: String?
     let machineIdentifier: String?
 }
 
+@MainActor
 class PlexAPI: ObservableObject {
     @Published var nowPlaying: NowPlaying?
     @Published var isLoading = true
@@ -68,7 +71,7 @@ class PlexAPI: ObservableObject {
     private let serverUrl: String
     private let token: String
     private let clientIdentifier: String
-    private var updateTimer: Timer?
+    nonisolated(unsafe) private var updateTimer: Timer?
 
     init(serverUrl: String, token: String) {
         self.serverUrl = serverUrl
@@ -78,14 +81,15 @@ class PlexAPI: ObservableObject {
 
     func startUpdating(interval: TimeInterval = 2.0) {
         // Initial fetch
-        Task {
+        Task { @MainActor in
             await fetchNowPlaying()
         }
 
-        // Start timer for periodic updates
+        // Start timer for periodic updates - ensure it runs on main thread
         updateTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            Task {
-                await self?.fetchNowPlaying()
+            guard let self = self else { return }
+            Task { @MainActor in
+                await self.fetchNowPlaying()
             }
         }
     }
@@ -95,7 +99,6 @@ class PlexAPI: ObservableObject {
         updateTimer = nil
     }
 
-    @MainActor
     func fetchNowPlaying() async {
         guard let url = URL(string: "\(serverUrl)/status/sessions") else {
             errorMessage = "Invalid server URL"
@@ -128,6 +131,8 @@ class PlexAPI: ObservableObject {
                         (track.Player?.state == "playing" || track.Player?.state == "paused")
                     }) {
                         let playerAddr = playingTrack.Player?.address
+                        let playerPort = playingTrack.Player?.port
+                        let playerProtocol = playingTrack.Player?.protocol
                         let machineId = playingTrack.Player?.machineIdentifier
 
                         nowPlaying = NowPlaying(
@@ -141,8 +146,11 @@ class PlexAPI: ObservableObject {
                             viewOffset: playingTrack.viewOffset ?? 0,
                             sessionKey: playingTrack.sessionKey ?? playingTrack.Session?.id,
                             playerAddress: playerAddr,
+                            playerPort: playerPort,
+                            playerProtocol: playerProtocol,
                             machineIdentifier: machineId
                         )
+
                         errorMessage = nil
                     } else {
                         nowPlaying = nil
@@ -199,58 +207,9 @@ class PlexAPI: ObservableObject {
         }
     }
 
-    // Playback control methods
-    func play() async {
-        await sendPlaybackCommand("/player/playback/play")
-    }
-
-    func pause() async {
-        await sendPlaybackCommand("/player/playback/pause")
-    }
-
-    func togglePlayPause() async {
-        if nowPlaying?.state == "playing" {
-            await pause()
-        } else {
-            await play()
-        }
-    }
-
-    func skipNext() async {
-        await sendPlaybackCommand("/player/playback/skipNext")
-    }
-
-    func skipPrevious() async {
-        await sendPlaybackCommand("/player/playback/skipPrevious")
-    }
-
-    private func sendPlaybackCommand(_ endpoint: String) async {
-        guard let machineId = nowPlaying?.machineIdentifier else {
-            return
-        }
-
-        // For Plex Desktop, send command through the server
-        let commandID = Int.random(in: 1...10000)
-        let fullUrl = "\(serverUrl)\(endpoint)?type=music&commandID=\(commandID)"
-
-        guard let url = URL(string: fullUrl) else {
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue(token, forHTTPHeaderField: "X-Plex-Token")
-        request.setValue(clientIdentifier, forHTTPHeaderField: "X-Plex-Client-Identifier")
-        request.setValue(machineId, forHTTPHeaderField: "X-Plex-Target-Client-Identifier")
-
-        do {
-            let (_, _) = try await URLSession.shared.data(for: request)
-        } catch {
-            // Silently fail - playback commands are best-effort
-        }
-    }
-
-    deinit {
-        stopUpdating()
+    nonisolated deinit {
+        // Must invalidate timer synchronously without MainActor since deinit is nonisolated
+        // This is safe because we're just invalidating the timer, not accessing @Published properties
+        updateTimer?.invalidate()
     }
 }
