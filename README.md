@@ -43,7 +43,7 @@ Download the DMG installer from the [Releases](https://github.com/impactcrew/ple
 3. Drag `PlexWidget.app` to the `Applications` folder
 4. Open `PlexWidget.app` (you'll see a security warning - this is normal)
 5. Go to **System Settings** > **Privacy & Security** and click **"Open Anyway"**
-6. Run this Terminal command to enable network access:*
+6. Run this Terminal command to enable network access:¹
    ```bash
    sudo xattr -rd com.apple.quarantine /Applications/PlexWidget.app
    ```
@@ -52,7 +52,7 @@ Download the DMG installer from the [Releases](https://github.com/impactcrew/ple
 
 **Universal Binary:** Works natively on both Intel (x86_64) and Apple Silicon (arm64) Macs.
 
-*\*Coming Soon:** PlexWidget will be published to the Mac App Store for easier installation and automatic updates.
+¹ Coming Soon: PlexWidget will be published to the Mac App Store for easier installation and automatic updates.
 
 ### Build from Source (Advanced)
 
