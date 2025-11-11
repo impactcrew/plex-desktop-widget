@@ -5,7 +5,7 @@
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-A beautiful, lightweight macOS menu bar widget that displays your currently playing Plex media with album artwork and track information in real-time. Features a customizable floating overlay with smooth transitions and native macOS design.
+A beautiful, lightweight macOS menu bar widget that displays your currently playing Plex media with album artwork and track information in real-time. Features a customizable floating overlay and smooth transitions.
 
 **Note:** This is a display-only widget. Playback controls (play/pause/skip) are planned for a future release.
 
