@@ -128,7 +128,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         onboardingWindow?.backgroundColor = .clear
         onboardingWindow?.level = .floating
         onboardingWindow?.isMovableByWindowBackground = true
-        onboardingWindow?.contentView = NSHostingView(rootView: onboardingView)
+
+        // CRITICAL FIX: Create NSHostingView in an autoreleasepool to prevent memory corruption
+        // during view initialization. This prevents EXC_BAD_ACCESS crashes in objc_autoreleasePoolPop.
+        // The issue occurs when NSHostingView's internal autorelease pool cleanup collides with
+        // SwiftUI's async task execution during onboarding validation.
+        let hostingView = autoreleasepool { () -> NSHostingView<OnboardingView> in
+            NSHostingView(rootView: onboardingView)
+        }
+        onboardingWindow?.contentView = hostingView
         onboardingWindow?.makeKeyAndOrderFront(nil)
 
         // Ensure window can accept keyboard input in borderless mode

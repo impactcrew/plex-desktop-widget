@@ -354,34 +354,41 @@ struct OnboardingView: View {
         let cleanUrl = serverUrl.trimmingCharacters(in: .whitespaces)
         let cleanToken = token.trimmingCharacters(in: .whitespaces)
 
-        // Validate by attempting to connect
-        Task { @MainActor in
-            print("DEBUG Onboarding: Testing connection to \(cleanUrl)")
+        // CRITICAL FIX: Wrap async task to stabilize autorelease pool behavior.
+        // This prevents memory corruption when async task's autorelease pool
+        // interferes with NSHostingView's lifecycle management.
+        autoreleasepool {
+            Task {
+                print("DEBUG Onboarding: Testing connection to \(cleanUrl)")
 
-            // Create test API instance and validate connection
-            // We perform the validation inline to ensure proper async/await sequencing
-            let testResult = await validatePlexConnection(serverUrl: cleanUrl, token: cleanToken)
+                // Create test API instance and validate connection
+                // Network I/O happens on background thread
+                let testResult = await validatePlexConnection(serverUrl: cleanUrl, token: cleanToken)
 
-            print("DEBUG Onboarding: Validation result - success: \(testResult.success), error: \(testResult.error ?? "nil")")
+                print("DEBUG Onboarding: Validation result - success: \(testResult.success), error: \(testResult.error ?? "nil")")
 
-            if let error = testResult.error {
-                // Connection failed - show error with animation
-                print("DEBUG Onboarding: Connection failed with error: \(error)")
-                withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                    errorMessage = error
-                    isValidating = false
-                }
-            } else {
-                // Success! Save the config
-                print("DEBUG Onboarding: Connection successful, saving config")
-                if ConfigManager.shared.saveConfig(serverUrl: cleanUrl, token: cleanToken) {
-                    // Call onComplete BEFORE setting isValidating = false
-                    // This ensures proper cleanup order when the window closes
-                    onComplete(cleanUrl, cleanToken)
-                } else {
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                        errorMessage = "Failed to save configuration"
-                        isValidating = false
+                // Now switch to MainActor for UI updates only
+                await MainActor.run {
+                    if let error = testResult.error {
+                        // Connection failed - show error with animation
+                        print("DEBUG Onboarding: Connection failed with error: \(error)")
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                            errorMessage = error
+                            isValidating = false
+                        }
+                    } else {
+                        // Success! Save the config
+                        print("DEBUG Onboarding: Connection successful, saving config")
+                        if ConfigManager.shared.saveConfig(serverUrl: cleanUrl, token: cleanToken) {
+                            // Call onComplete BEFORE setting isValidating = false
+                            // This ensures proper cleanup order when the window closes
+                            onComplete(cleanUrl, cleanToken)
+                        } else {
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                errorMessage = "Failed to save configuration"
+                                isValidating = false
+                            }
+                        }
                     }
                 }
             }
@@ -433,8 +440,15 @@ struct OnboardingView: View {
                     return (false, "Cannot connect to server - check URL and network")
                 case NSURLErrorNetworkConnectionLost:
                     return (false, "Network connection lost")
+                case NSURLErrorNotConnectedToInternet:
+                    return (false, "No internet connection - check your network")
+                case NSURLErrorSecureConnectionFailed:
+                    return (false, "SSL connection failed - use http:// instead of https://")
+                case NSURLErrorServerCertificateUntrusted:
+                    return (false, "Server certificate untrusted - check server URL")
                 default:
-                    return (false, "Network error: \(error.localizedDescription)")
+                    // Show error code for debugging
+                    return (false, "Network error (code \(error.code)): \(error.localizedDescription)")
                 }
             }
             return (false, "Connection failed: \(error.localizedDescription)")
