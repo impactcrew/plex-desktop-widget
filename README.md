@@ -1,187 +1,226 @@
 # Plex Desktop Widget
 
-<div align="center">
+![Version](https://img.shields.io/badge/version-1.0-blue.svg)
+![Platform](https://img.shields.io/badge/platform-macOS-blue.svg)
+![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-[![macOS Version](https://img.shields.io/badge/macOS-13.0%2B-blue?style=flat-square&logo=apple)](https://www.apple.com/macos)
-[![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange?style=flat-square&logo=swift)](https://swift.org)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-
-**A Beautiful Floating Desktop Music Player for Your Plex Library**
-
-*Control your music without leaving your desk. Gorgeous. Customizable. Always there.*
+A beautiful, lightweight macOS menu bar widget that displays your currently playing Plex media with album artwork and track information in real-time. Features a customizable floating overlay with smooth transitions and native macOS design.
 
 ![Plex Desktop Widget](Screenshot.png)
 
+<div align="center">
+  <img src="Onboarding.webp" width="30%" alt="Onboarding screen">
+  <img src="Settings.webp" width="30%" alt="Settings panel">
+  <img src="Player.webp" width="30%" alt="Widget player modes">
 </div>
-
----
-
-## What Is Plex Desktop Widget?
-
-Tired of hunting through windows to control your Plex music? Meet your new favorite desktop companion.
-
-Plex Desktop Widget puts a sleek, customizable floating player right on your macOS desktop. See what's playing, skip to the next track, and discover your music—all without switching away from what you're working on.
-
-It's designed to be beautiful by default and endlessly customizable.
-
----
 
 ## Features
 
-### Now Playing Widget
-- Elegant floating player that stays on top of your other windows
-- Real-time album art display with your current track info
-- Glowing effects that complement your music mood
-- Seamless integration with your Plex Media Server
+- **Menu Bar Integration** - Menu bar icon with Plex chevron for quick access to settings
+- **Beautiful Album Art** - Displays high-quality album artwork with customizable shapes (square, rounded, circle)
+- **Smooth Track Transitions** - Album art persists during track changes for seamless playback experience
+- **Real-time Updates** - Automatically polls and updates as your playback changes (2-second interval)
+- **Native macOS Design** - Glassmorphic overlay with smooth animations
+- **Secure Authentication** - Token stored securely in macOS Keychain
+- **First-run Onboarding** - Easy setup with guided onboarding and connection validation
+- **Customizable Appearance** - Theme (Light/Dark), Layout (Side/Overlay), Glow colors
+- **Universal Binary** - Optimized for both Intel and Apple Silicon Macs
+- **Hidden from Sound Menu** - Doesn't clutter macOS sound menu (Plex already shows there)
 
-### Customization Options
-- **Multiple Themes**: Light and dark modes to match your setup
-- **Layout Styles**: Choose between side-by-side player or overlay style
-- **Album Art Shapes**: Square or circular album artwork frames
-- **Glow Effects**: Toggle on/off and pick your favorite glow color from a color palette
-- **Auto-Launch**: Start the widget automatically when you log in
+## Installation
 
-### Playback Controls
-- Play and pause your current track
-- Skip forward or back through your playlist
-- Instant access to track information (title, artist, album)
+### From Source
 
-### Privacy & Security
-- Your Plex login credentials are stored securely in macOS Keychain
-- No cloud syncing—everything stays local on your device
-- Direct connection to your Plex Media Server
+1. Clone this repository
+2. Navigate to `PlexWidget/` directory
+3. Run `./build.sh` to create universal binary
+4. Copy `build/PlexWidget.app` to your Applications folder
+5. Launch PlexWidget and complete the onboarding setup
+6. Grant necessary permissions when prompted
 
----
+### Pre-built Release (Coming Soon)
 
-## Screenshots
+Pre-built DMG packages will be available in the [Releases](https://github.com/impactcrew/plex-desktop-widget/releases) page once v1.0.0 is officially released.
 
-<div align="center">
+## Requirements
 
-**Widget Showcase**
-Multiple styles and customization options
+- macOS 13.0 (Ventura) or later
+- Compatible with both Intel and Apple Silicon Macs (Universal Binary)
+- Active Plex Media Server
+- Plex account with authentication token
 
-![Player Widget](Player.webp)
+## Configuration
 
-**Customization Settings**
-Tailor the widget to your style
+On first launch, the widget will guide you through a simple onboarding process:
 
-![Settings Panel](Settings.webp)
+1. **Server URL** - Enter your Plex server URL (e.g., `http://localhost:32400`)
+2. **Authentication Token** - Provide your Plex authentication token
+3. **Permissions** - Grant accessibility and app monitoring permissions
 
-</div>
+To get your Plex token, see [Plex's official guide](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/).
 
----
+## Settings
 
-## Getting Started
+Access settings from the menu bar icon to customize:
 
-### Requirements
-- macOS 13.0 or later
-- Plex Media Server with music library
-- Active Plex account with authentication token
+- Theme (Light/Dark)
+- Layout (Side/Overlay)
+- Album art shape (Square/Circular)
+- Glow (on/off, color: blue, purple, pink, orange, green, cyan)
 
-### Installation
+## Architecture
 
-#### App Store (Coming Soon)
-The easiest way to install Plex Desktop Widget will be through the App Store. We're working on making it available soon!
+Built with modern Swift and SwiftUI:
 
-#### Build from Source
-If you'd like to try the latest development version:
+- **SwiftUI** - Declarative UI framework
+- **Combine** - Reactive programming for real-time updates
+- **Keychain Services** - Secure credential storage
+- **NSWorkspace** - App monitoring and detection
+- **UserDefaults** - Settings persistence
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/impactcrew/plex-desktop-widget.git
-   cd plex-desktop-widget
-   ```
+## Building from Source
 
-2. Open `PlexWidget.xcodeproj` in Xcode
+### Prerequisites
 
-3. Select your Mac as the target and hit Run
+- Xcode 15.0 or later
+- macOS 13.0 (Ventura) or later
+- Command Line Tools installed
 
----
+### Build Instructions
 
-## How to Get Your Plex Token
-
-You'll need your Plex authentication token to connect the widget to your server.
-
-### Method 1: Easy Web Method (Recommended)
-1. Go to your Plex Dashboard: [app.plex.tv/web](https://app.plex.tv/web)
-2. Log in with your Plex account
-3. Click your profile picture → Settings → Account
-4. Under "Access tokens," you'll see your token
-5. Copy and paste it into the widget settings
-
-### Method 2: Command Line
-If you prefer the terminal:
 ```bash
-curl -u your-email:your-password https://plex.tv/users/account/token/xml | grep -oP 'token="\K[^"]*'
+# Clone the repository
+git clone https://github.com/impactcrew/plex-desktop-widget.git
+cd plex-desktop-widget/PlexWidget
+
+# Run the build script (creates universal binary)
+./build.sh
+
+# The app will be at: build/PlexWidget.app
+# Copy to Applications folder
+cp -r build/PlexWidget.app /Applications/
 ```
 
----
+## Development
 
-## Planned Features
+### Project Structure
 
-We're constantly improving Plex Desktop Widget. Here's what's coming:
+```
+PlexWidget/
+├── PlexWidget/
+│   ├── PlexWidgetApp.swift       # Main app entry point
+│   ├── ContentView.swift          # Main widget view
+│   ├── OnboardingView.swift       # First-run setup
+│   ├── SettingsView.swift         # Settings panel
+│   ├── NowPlayingView.swift       # Now playing display
+│   ├── PlexAPI.swift              # Plex API integration (display only)
+│   ├── Config.swift               # Configuration manager
+│   ├── MediaRemoteController.swift # Media remote integration (legacy)
+│   ├── PlexAppMonitor.swift       # App detection
+│   ├── LaunchAtLogin.swift        # Launch on login helper
+│   └── WidgetSettings.swift       # Settings model
+└── Assets.xcassets/               # Icons and resources
+```
 
-- **Continuous Mix**: Smooth playback without blank screens between tracks
-- **Compact Mini View**: A smaller widget option for screens with limited space
+### Contributing
 
-Got a feature request? Let us know!
+Contributions are welcome! Please feel free to submit a Pull Request.
 
----
-
-## System Requirements
-
-| Requirement | Details |
-|---|---|
-| **OS** | macOS 13.0 or later |
-| **Memory** | Minimal (runs in the background) |
-| **Connection** | Local network access to Plex Media Server |
-| **Plex Account** | Free tier supported (authentication required) |
-
----
-
-## Privacy & Security
-
-- Your Plex credentials are stored securely in macOS Keychain
-- The widget communicates directly with your Plex Media Server—no intermediary servers
-- No analytics, no tracking, no advertisements
-- Your music library data never leaves your local network
-
----
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## Troubleshooting
 
-### Widget won't connect to my Plex server
-- Make sure your Plex Media Server is running and accessible
-- Verify your Plex token is correct (copy it again if needed)
-- Check that your Mac can reach your server on the local network
+### Widget Not Showing
 
-### Album art not showing
-- Ensure the music in your Plex library has proper metadata
-- Try refreshing the widget or playing a different track
+- Ensure Plex is actively playing media
+- Check that your Plex server is accessible
+- Verify server URL and token are correct in settings
+- Check Console.app for error logs (filter by "PlexWidget")
 
-### Need more help?
-Open an issue on GitHub or check the documentation.
+### Gatekeeper Warning
 
----
+- Right-click PlexWidget.app and select "Open" (first launch only)
+- Click "Open" in the security dialog
+- App is not code-signed (requires $99/year Apple Developer Program)
+
+### App Crashes During Onboarding
+
+- This is a known intermittent issue (see Known Issues section)
+- Simply relaunch the app - your credentials are saved
+- If crash persists, check crash logs: `~/Library/Logs/DiagnosticReports/PlexWidget*`
+- Please report crash logs in GitHub Issues to help us fix this
+
+## Privacy
+
+This app:
+
+- Stores your Plex token securely in macOS Keychain
+- Communicates only with your specified Plex server
+- Does not collect or transmit any usage data
+- Does not require internet access beyond your Plex server
+
+## Recent Updates
+
+- **Code cleanup** - Removed non-functional playback control code (~200 lines)
+- **Improved threading** - Resolved @MainActor threading issues with network I/O
+- **Smooth track transitions** - Album art now persists during track changes (no flicker)
+- **Seamless onboarding** - Smooth window transition instead of app termination
+- **Menu bar quit button** - Added quit option in settings panel
+- **Universal binary** - Built for both Intel and Apple Silicon Macs
+- **Hidden from sound menu** - No longer appears in macOS sound menu
+
+## Known Issues
+
+### Intermittent Crash After Onboarding
+
+**Status:** Under Investigation
+
+Some users have reported an intermittent crash that occurs after completing the onboarding process. This issue is not consistently reproducible:
+
+- Crash may occur during or immediately after onboarding validation
+- Does not affect all users or all launches
+- App generally runs stably once past the initial onboarding
+
+**Workaround:** If the app crashes during onboarding, simply relaunch it. Your credentials will be saved and the app should start normally.
+
+*We are actively investigating this issue and working on a fix for the next release.*
+
+## Known Limitations
+
+### Playback Control Not Supported
+
+PlexWidget cannot add play/pause/skip buttons due to fundamental limitations in Plex's architecture:
+
+- **Plex Companion Protocol** - Exclusive to official Plex applications only
+- **No Third-Party Discovery** - Third-party apps cannot be discovered or targeted for playback control
+- **Controller-Only Desktop App** - The macOS Plex app functions only as a controller, not a receiver
+- **No Public API** - No public API exists for remote playback control
+
+*This is not a bug or missing feature - it's an architectural restriction enforced by Plex. We investigated multiple approaches and found no viable solution for third-party playback control.*
+
+## Upcoming Development
+
+- Mini mode for smaller screens
+- Windows version
 
 ## License
 
-Plex Desktop Widget is released under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
+## Acknowledgments
 
-## Credits
-
-Built with love for Plex users who deserve beautiful software.
-
-Powered by Swift and SwiftUI on macOS.
+- Built for the [Plex](https://www.plex.tv/) community
+- Designed & Developed by [IMPACT Crew](https://impactcrew.com.au)
 
 ---
 
 <div align="center">
 
-**Made with care for music lovers**
-
-[Report an Issue](https://github.com/impactcrew/plex-desktop-widget/issues) • [Suggest a Feature](https://github.com/impactcrew/plex-desktop-widget/discussions)
+**Made for the macOS community**
 
 </div>
