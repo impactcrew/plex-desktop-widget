@@ -1,0 +1,71 @@
+{
+  "" : {
+    "const-values" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidget-primary.swiftconstvalues",
+    "dependencies" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidget-primary.d",
+    "diagnostics" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidget-primary.dia",
+    "emit-module-dependencies" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidget-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidget-primary-emit-module.dia",
+    "pch" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidget-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidget-primary.swiftdeps"
+  },
+  "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/GeneratedAssetSymbols.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/Config.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/Config.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/Config.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/Config.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/ContentView.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/ContentView.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/ContentView.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/ContentView.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/LaunchAtLogin.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/LaunchAtLogin.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/LaunchAtLogin.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/LaunchAtLogin.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/MediaRemoteController.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/MediaRemoteController.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/MediaRemoteController.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/MediaRemoteController.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/NowPlayingView.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/NowPlayingView.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/NowPlayingView.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/NowPlayingView.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/OnboardingView.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/OnboardingView.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/OnboardingView.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/OnboardingView.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/PlexAPI.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexAPI.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexAPI.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexAPI.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/PlexAppMonitor.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexAppMonitor.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexAppMonitor.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexAppMonitor.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/PlexWidgetApp.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidgetApp.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidgetApp.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/PlexWidgetApp.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/SettingsView.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/SettingsView.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/SettingsView.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/SettingsView.o"
+  },
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/WidgetSettings.swift" : {
+    "index-unit-output-path" : "/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/WidgetSettings.o",
+    "llvm-bc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/WidgetSettings.bc",
+    "object" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-x86_64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/x86_64/WidgetSettings.o"
+  }
+}

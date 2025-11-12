@@ -1,0 +1,32 @@
+{
+  "source": "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/ContentView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Loading...",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "Error",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "Nothing playing",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 152
+        }
+      }
+    ]
+  },
+  "version": 1
+}

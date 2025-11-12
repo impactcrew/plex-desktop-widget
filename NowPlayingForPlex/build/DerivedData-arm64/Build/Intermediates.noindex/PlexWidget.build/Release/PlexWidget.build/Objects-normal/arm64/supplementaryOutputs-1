@@ -1,0 +1,12 @@
+{
+  "/Volumes/LIME2/Work/Development/plex-desktop-widget/PlexWidget/PlexWidget/PlexWidgetApp.swift" : {
+    "abi-baseline-json" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-arm64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/arm64/PlexWidget.abi.json",
+    "const-values" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-arm64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/arm64/PlexWidget-primary.swiftconstvalues",
+    "dependencies" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-arm64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/arm64/PlexWidget-primary.d",
+    "diagnostics" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-arm64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/arm64/PlexWidget-primary.dia",
+    "objc-header" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-arm64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/arm64/PlexWidget-Swift.h",
+    "swiftdoc" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-arm64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/arm64/PlexWidget.swiftdoc",
+    "swiftmodule" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-arm64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/arm64/PlexWidget.swiftmodule",
+    "swiftsourceinfo" : "/Users/lemon/dev/plex-desktop-widget/PlexWidget/build/DerivedData-arm64/Build/Intermediates.noindex/PlexWidget.build/Release/PlexWidget.build/Objects-normal/arm64/PlexWidget.swiftsourceinfo"
+  }
+}
