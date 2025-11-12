@@ -1,5 +1,5 @@
 #!/bin/bash
-# Build script for Plex Desktop Widget (Universal Binary)
+# Build script for NowPlaying for Plex (Universal Binary)
 # Supports both Intel (x86_64) and Apple Silicon (arm64)
 
 set -e
@@ -9,9 +9,10 @@ PROJECT_NAME="PlexWidget"
 SCHEME="PlexWidget"
 CONFIGURATION="Release"
 BUILD_DIR="$PROJECT_DIR/build"
+OUTPUT_APP_NAME="NowPlaying for Plex.app"
 
 echo "=========================================="
-echo "Building Plex Desktop Widget"
+echo "Building NowPlaying for Plex"
 echo "Universal Binary (Intel + Apple Silicon)"
 echo "=========================================="
 echo ""
@@ -50,7 +51,7 @@ echo "Creating universal binary..."
 APP_NAME="$PROJECT_NAME.app"
 X86_APP="$BUILD_DIR/DerivedData-x86_64/Build/Products/$CONFIGURATION/$APP_NAME"
 ARM_APP="$BUILD_DIR/DerivedData-arm64/Build/Products/$CONFIGURATION/$APP_NAME"
-UNIVERSAL_APP="$BUILD_DIR/$APP_NAME"
+UNIVERSAL_APP="$BUILD_DIR/$OUTPUT_APP_NAME"
 
 # Copy one architecture as base
 cp -R "$ARM_APP" "$UNIVERSAL_APP"

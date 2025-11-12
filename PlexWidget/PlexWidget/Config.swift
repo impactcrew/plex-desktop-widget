@@ -9,7 +9,7 @@ struct PlexConfig {
 class ConfigManager {
     static let shared = ConfigManager()
 
-    private let keychainService = "com.plexwidget.credentials"
+    private let keychainService = "com.nowplayingforplex.credentials"
     private let tokenAccount = "plex-token"
     private let serverUrlKey = "plex-server-url"
 

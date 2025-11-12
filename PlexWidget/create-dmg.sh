@@ -1,9 +1,14 @@
 #!/bin/bash
 set -e
 
-APP_NAME="PlexWidget"
-DMG_NAME="PlexWidget"
-SOURCE_APP="build/PlexWidget.app"
+# Ignore errors when ejecting old disks (they may not exist or be busy)
+set +e
+hdiutil detach /dev/disk4 -force 2>/dev/null
+set -e
+
+APP_NAME="NowPlaying for Plex"
+DMG_NAME="NowPlaying-for-Plex"
+SOURCE_APP="build/NowPlaying for Plex.app"
 DMG_DIR="dmg_temp"
 BG_IMAGE="dmg_background.png"
 
@@ -28,11 +33,11 @@ ln -s /Applications "$DMG_DIR/Applications"
 # Create beautiful orange-to-yellow gradient background (smooth diagonal)
 echo "Creating orange-to-yellow gradient background..."
 
-# Create a smooth diagonal gradient from orange (top-left) to bright yellow (bottom-right)
-# Using a brighter yellow (#F1C40F) for more vibrant yellow appearance
-convert -size 660x400 \
-    -define gradient:angle=135 \
-    gradient:'#E67E22'-'#F1C40F' \
+# Create a smooth 3-stop diagonal gradient matching the app icon design
+# Orange #FF6B35 (top-left) → Blend #FFAB3B (75%) → Yellow #FFC93C (bottom-right)
+convert -size 660x400 xc: \
+    -sparse-color Barycentric \
+    "0,0 #FF6B35  495,0 #FFAB3B  660,400 #FFC93C" \
     dmg_background.png
 echo "✓ Gradient created"
 
@@ -41,6 +46,7 @@ mkdir -p "$DMG_DIR/.background"
 cp dmg_background.png "$DMG_DIR/.background/background.png"
 
 # Copy app icon for DMG volume icon
+# TODO: This will use the new landscape icon once we regenerate AppIcon.icns
 cp "$SOURCE_APP/Contents/Resources/AppIcon.icns" "$DMG_DIR/.VolumeIcon.icns"
 
 # Create temporary DMG

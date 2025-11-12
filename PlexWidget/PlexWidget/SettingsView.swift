@@ -96,7 +96,7 @@ struct SettingsView: View {
                     .fill(Color.white.opacity(0.1))
                     .frame(height: 1)
 
-                // Quit PlexWidget
+                // Quit NowPlaying for Plex
                 Button(action: {
                     NSApplication.shared.terminate(nil)
                 }) {
@@ -105,7 +105,7 @@ struct SettingsView: View {
                             .font(.system(size: 13, weight: .medium))
                             .foregroundColor(.white.opacity(0.8))
 
-                        Text("Quit PlexWidget")
+                        Text("Quit NowPlaying for Plex")
                             .font(.system(size: 13, weight: .medium))
                             .foregroundColor(.white)
 

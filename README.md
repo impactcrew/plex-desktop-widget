@@ -1,4 +1,4 @@
-# Plex Desktop Widget
+# NowPlaying for Plex
 
 ![Version](https://img.shields.io/badge/version-1.0-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-macOS-blue.svg)
@@ -9,7 +9,7 @@ A beautiful, lightweight macOS menu bar widget that displays your currently play
 
 **Note:** This is a display-only widget.
 
-![Plex Desktop Widget](Screenshot.png)
+![NowPlaying for Plex](Screenshot.png)
 
 ### Onboarding & Settings
 <img src="Onboarding.webp" alt="Onboarding screen">
@@ -38,21 +38,21 @@ A beautiful, lightweight macOS menu bar widget that displays your currently play
 
 Download the DMG installer from the [Releases](https://github.com/impactcrew/plex-desktop-widget/releases) page.
 
-1. Download the latest `PlexWidget.dmg` from the Releases page
+1. Download the latest `NowPlaying-for-Plex.dmg` from the Releases page
 2. Open the DMG file
-3. Drag `PlexWidget.app` to the `Applications` folder
-4. Open `PlexWidget.app` (you'll see a security warning - this is normal)
+3. Drag `NowPlaying for Plex.app` to the `Applications` folder
+4. Open `NowPlaying for Plex.app` (you'll see a security warning - this is normal)
 5. Go to **System Settings** > **Privacy & Security** and click **"Open Anyway"**
 6. Run this Terminal command to enable network access: ¹
    ```bash
-   sudo xattr -rd com.apple.quarantine /Applications/PlexWidget.app
+   sudo xattr -rd com.apple.quarantine "/Applications/NowPlaying for Plex.app"
    ```
-7. Launch PlexWidget and complete the onboarding setup
+7. Launch NowPlaying for Plex and complete the onboarding setup
 8. Grant Keychain access when prompted
 
 **Universal Binary:** Works natively on both Intel (x86_64) and Apple Silicon (arm64) Macs.
 
-¹ Coming Soon: PlexWidget will be published to the Mac App Store for easier installation and automatic updates.
+¹ Coming Soon: NowPlaying for Plex will be published to the Mac App Store for easier installation and automatic updates.
 
 ### Build from Source (Advanced)
 
@@ -61,7 +61,7 @@ If you want to build from source:
 1. Clone this repository
 2. Navigate to `PlexWidget/` directory
 3. Run `./build.sh` to create universal binary
-4. Copy `build/PlexWidget.app` to your Applications folder
+4. Copy `build/NowPlaying for Plex.app` to your Applications folder
 
 ## Requirements
 
@@ -117,9 +117,9 @@ cd plex-desktop-widget/PlexWidget
 # Run the build script (creates universal binary)
 ./build.sh
 
-# The app will be at: build/PlexWidget.app
+# The app will be at: build/NowPlaying for Plex.app
 # Copy to Applications folder
-cp -r build/PlexWidget.app /Applications/
+cp -r "build/NowPlaying for Plex.app" /Applications/
 ```
 
 ## Development
@@ -160,11 +160,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Ensure Plex is actively playing media
 - Check that your Plex server is accessible
 - Verify server URL and token are correct in settings
-- Check Console.app for error logs (filter by "PlexWidget")
+- Check Console.app for error logs (filter by "NowPlaying")
 
 ### Gatekeeper Warning
 
-- Right-click PlexWidget.app and select "Open" (first launch only)
+- Right-click "NowPlaying for Plex.app" and select "Open" (first launch only)
 - Click "Open" in the security dialog
 - App is not code-signed (requires $99/year Apple Developer Program)
 
@@ -172,7 +172,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - This issue has been fixed in v1.0.0
 - If you're using an older version, please update to the latest release
-- If crashes persist after updating, please report in GitHub Issues with crash logs from: `~/Library/Logs/DiagnosticReports/PlexWidget*`
+- If crashes persist after updating, please report in GitHub Issues with crash logs from: `~/Library/Logs/DiagnosticReports/NowPlaying*`
 
 ## Privacy
 
@@ -201,7 +201,7 @@ None! All critical bugs have been fixed in v1.0.0.
 
 ### Playback Control Not Supported
 
-PlexWidget cannot add play/pause/skip buttons due to fundamental limitations in Plex's architecture:
+NowPlaying for Plex cannot add play/pause/skip buttons due to fundamental limitations in Plex's architecture:
 
 - **Plex Companion Protocol** - Exclusive to official Plex applications only
 - **No Third-Party Discovery** - Third-party apps cannot be discovered or targeted for playback control
